@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { Trophy } from "lucide-react";
+import { logoutAction } from "@/app/auth/actions";
+import { getCurrentUser } from "@/lib/auth";
 
 const links = [
   { href: "/", label: "Pocetna" },
@@ -9,7 +11,9 @@ const links = [
   { href: "/admin", label: "Admin" }
 ];
 
-export function Navbar() {
+export async function Navbar() {
+  const user = await getCurrentUser();
+
   return (
     <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur dark:border-slate-800 dark:bg-slate-950/90">
       <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
@@ -25,6 +29,22 @@ export function Navbar() {
               {link.label}
             </Link>
           ))}
+          {user ? (
+            <form action={logoutAction}>
+              <button className="rounded-2xl px-3 py-2 font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white" type="submit">
+                Odjava
+              </button>
+            </form>
+          ) : (
+            <>
+              <Link href="/auth/login" className="rounded-2xl px-3 py-2 font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white">
+                Prijava
+              </Link>
+              <Link href="/auth/register" className="rounded-2xl px-3 py-2 font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white">
+                Registracija
+              </Link>
+            </>
+          )}
         </div>
       </nav>
     </header>

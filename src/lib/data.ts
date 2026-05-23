@@ -7,7 +7,8 @@ export const teams: Team[] = [
     shortName: "TER",
     city: "Sarajevo",
     foundedYear: 2018,
-    primaryColor: "#14904a"
+    primaryColor: "#14904a",
+    logoUrl: null
   },
   {
     id: "team-river",
@@ -15,7 +16,8 @@ export const teams: Team[] = [
     shortName: "RIV",
     city: "Mostar",
     foundedYear: 2015,
-    primaryColor: "#2563eb"
+    primaryColor: "#2563eb",
+    logoUrl: null
   },
   {
     id: "team-borac",
@@ -23,7 +25,8 @@ export const teams: Team[] = [
     shortName: "BOR",
     city: "Banja Luka",
     foundedYear: 2012,
-    primaryColor: "#dc2626"
+    primaryColor: "#dc2626",
+    logoUrl: null
   },
   {
     id: "team-zvijezda",
@@ -31,7 +34,8 @@ export const teams: Team[] = [
     shortName: "ZVI",
     city: "Tuzla",
     foundedYear: 2020,
-    primaryColor: "#9333ea"
+    primaryColor: "#9333ea",
+    logoUrl: null
   }
 ];
 

@@ -65,3 +65,13 @@ export async function createPlayer(input: PlayerInput): Promise<PlayerWithTeam> 
     team: player.team
   };
 }
+
+export async function deletePlayer(id: string): Promise<void> {
+  ensureDatabaseConfigured();
+
+  await prisma.player.delete({
+    where: {
+      id
+    }
+  });
+}

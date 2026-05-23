@@ -36,6 +36,7 @@ model Team {
   city         String
   foundedYear  Int
   primaryColor String
+  logoUrl      String?
   players      Player[]
   homeMatches  Match[]    @relation("HomeTeam")
   awayMatches  Match[]    @relation("AwayTeam")

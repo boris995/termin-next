@@ -5,6 +5,7 @@ export type Team = {
   city: string;
   foundedYear: number;
   primaryColor: string;
+  logoUrl: string | null;
 };
 
 export type Player = {

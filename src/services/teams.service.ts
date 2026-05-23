@@ -1,5 +1,5 @@
 import { ensureDatabaseConfigured, prisma } from "@/lib/db";
-import type { TeamInput } from "@/lib/validations/team";
+import type { TeamInput, TeamUpdateInput } from "@/lib/validations/team";
 import type { StandingWithTeam, Team } from "@/types";
 
 export async function getTeams(): Promise<Team[]> {
@@ -59,6 +59,27 @@ export async function createTeam(input: TeamInput): Promise<Team> {
   ensureDatabaseConfigured();
 
   return prisma.team.create({
-    data: input
+    data: {
+      ...input,
+      logoUrl: input.logoUrl || null
+    }
+  });
+}
+
+export async function updateTeam(input: TeamUpdateInput): Promise<Team> {
+  ensureDatabaseConfigured();
+
+  return prisma.team.update({
+    where: {
+      id: input.id
+    },
+    data: {
+      name: input.name,
+      shortName: input.shortName,
+      city: input.city,
+      foundedYear: input.foundedYear,
+      primaryColor: input.primaryColor,
+      logoUrl: input.logoUrl || null
+    }
   });
 }

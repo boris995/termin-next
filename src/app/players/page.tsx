@@ -1,6 +1,8 @@
 import { PlayerCard } from "@/components/players/PlayerCard";
 import { getPlayers } from "@/services/players.service";
 
+export const dynamic = "force-dynamic";
+
 export default async function PlayersPage() {
   const players = await getPlayers();
 

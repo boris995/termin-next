@@ -1,6 +1,8 @@
 import { MatchCard } from "@/components/matches/MatchCard";
 import { getMatches } from "@/services/matches.service";
 
+export const dynamic = "force-dynamic";
+
 export default async function MatchesPage() {
   const matches = await getMatches();
 

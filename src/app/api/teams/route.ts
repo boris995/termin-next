@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
-import { getTeams } from "@/services/teams.service";
+import { requireAdminApi } from "@/lib/auth";
+import { ServiceError, toErrorMessage } from "@/lib/errors";
 import { teamSchema } from "@/lib/validations/team";
+import { createTeam, getTeams } from "@/services/teams.service";
 
 export async function GET(): Promise<NextResponse> {
   const teams = await getTeams();
@@ -8,11 +10,18 @@ export async function GET(): Promise<NextResponse> {
 }
 
 export async function POST(request: Request): Promise<NextResponse> {
-  const parsed = teamSchema.safeParse(await request.json());
+  try {
+    await requireAdminApi();
+    const parsed = teamSchema.safeParse(await request.json());
 
-  if (!parsed.success) {
-    return NextResponse.json({ error: "Podaci za tim nisu ispravni" }, { status: 400 });
+    if (!parsed.success) {
+      return NextResponse.json({ error: "Podaci za tim nisu ispravni" }, { status: 400 });
+    }
+
+    const team = await createTeam(parsed.data);
+    return NextResponse.json({ data: team }, { status: 201 });
+  } catch (error) {
+    const status = error instanceof ServiceError ? error.statusCode : 500;
+    return NextResponse.json({ error: toErrorMessage(error) }, { status });
   }
-
-  return NextResponse.json({ data: parsed.data }, { status: 201 });
 }

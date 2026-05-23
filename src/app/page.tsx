@@ -8,6 +8,8 @@ import { getLatestResults, getUpcomingMatches } from "@/services/matches.service
 import { getTopPlayers } from "@/services/players.service";
 import { getStandings, getTeams } from "@/services/teams.service";
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   const [standings, upcomingMatches, latestResults, topPlayers, teams] = await Promise.all([
     getStandings(),

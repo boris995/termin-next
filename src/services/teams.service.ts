@@ -1,29 +1,64 @@
-import { standings, teams } from "@/lib/data";
+import { ensureDatabaseConfigured, prisma } from "@/lib/db";
+import type { TeamInput } from "@/lib/validations/team";
 import type { StandingWithTeam, Team } from "@/types";
 
 export async function getTeams(): Promise<Team[]> {
-  return teams;
+  ensureDatabaseConfigured();
+
+  return prisma.team.findMany({
+    orderBy: {
+      name: "asc"
+    }
+  });
 }
 
 export async function getTeamById(id: string): Promise<Team | null> {
-  return teams.find((team) => team.id === id) ?? null;
+  ensureDatabaseConfigured();
+
+  return prisma.team.findUnique({
+    where: {
+      id
+    }
+  });
 }
 
 export async function getStandings(): Promise<StandingWithTeam[]> {
-  return standings
-    .map((standing) => {
-      const team = teams.find((item) => item.id === standing.teamId);
+  ensureDatabaseConfigured();
 
-      if (!team) {
-        return null;
+  const standings = await prisma.standing.findMany({
+    include: {
+      team: true
+    },
+    orderBy: [
+      {
+        points: "desc"
+      },
+      {
+        goalsFor: "desc"
       }
+    ]
+  });
 
-      return {
-        ...standing,
-        team,
-        goalDifference: standing.goalsFor - standing.goalsAgainst
-      };
-    })
-    .filter((standing): standing is StandingWithTeam => standing !== null)
+  return standings
+    .map((standing) => ({
+      teamId: standing.teamId,
+      played: standing.played,
+      won: standing.won,
+      drawn: standing.drawn,
+      lost: standing.lost,
+      goalsFor: standing.goalsFor,
+      goalsAgainst: standing.goalsAgainst,
+      points: standing.points,
+      team: standing.team,
+      goalDifference: standing.goalsFor - standing.goalsAgainst
+    }))
     .sort((a, b) => b.points - a.points || b.goalDifference - a.goalDifference);
+}
+
+export async function createTeam(input: TeamInput): Promise<Team> {
+  ensureDatabaseConfigured();
+
+  return prisma.team.create({
+    data: input
+  });
 }

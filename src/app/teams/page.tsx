@@ -2,6 +2,8 @@ import { StandingsTable } from "@/components/teams/StandingsTable";
 import { TeamCard } from "@/components/teams/TeamCard";
 import { getStandings, getTeams } from "@/services/teams.service";
 
+export const dynamic = "force-dynamic";
+
 export default async function TeamsPage() {
   const [teams, standings] = await Promise.all([getTeams(), getStandings()]);
 

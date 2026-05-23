@@ -4,17 +4,18 @@
 
 Ovaj projekat je moderna veb aplikacija za fudbalsku ligu. Aplikacija je prvo prilagodjena telefonu, ali mora dobro raditi i na tabletima i na velikim ekranima. Glavni cilj je cista struktura, lako odrzavanje i jednostavno prosirivanje funkcija.
 
-Naziv aplikacije: **Termin liga**
+Naziv aplikacije je **Termin liga**.
 
 ## Tehnologije
 
-- Okvir aplikacije: Next.js sa App Router pristupom.
+- Okvir aplikacije: Next.js 16.2.6 sa App Router pristupom.
 - Jezik: TypeScript u strogom rezimu.
 - Baza podataka: PostgreSQL.
+- Produkcijska baza: Supabase.
 - Rad sa bazom: Prisma.
 - Stilovi: Tailwind CSS.
 - Validacija podataka: Zod.
-- Ciljano objavljivanje: Vercel.
+- Produkcijsko objavljivanje: Vercel.
 
 ## Glavne funkcije
 
@@ -24,17 +25,18 @@ Naziv aplikacije: **Termin liga**
 - Pregled igraca sa golovima, asistencijama i ocjenama.
 - Pregled timova sa osnovnim informacijama.
 - Administratorski pregled za timove, igrace i utakmice.
-- API rute za timove, igrace i utakmice, uz obaveznu validaciju ulaza.
+- Serverski API za timove, igrace i utakmice.
+- Povezivanje sa PostgreSQL bazom preko Prisma klijenta.
 
-## Pravila za arhitekturu
-
-### Server i podaci
+## Pravila za server i podatke
 
 - Prednost imaju server komponente i server akcije za rad sa podacima.
-- API rute koristiti samo kada zaista treba spoljasnji pristup podacima.
+- API rute koristiti samo kada treba spoljasnji pristup podacima.
 - Svaki ulaz korisnika mora biti validiran preko Zod sema.
 - Tajne vrijednosti, lozinke i kljucevi nikada ne smiju biti dostupni klijentskom kodu.
 - Greske moraju imati jasan odgovor i odgovarajuci HTTP status.
+- Poslovna logika mora biti u servisima u direktorijumu `src/services`.
+- Direktan rad sa bazom ide kroz `src/lib/db.ts` i Prisma klijent.
 
 Primjer odgovora za gresku:
 
@@ -42,10 +44,10 @@ Primjer odgovora za gresku:
 return NextResponse.json({ error: "Igrac nije pronadjen" }, { status: 404 });
 ```
 
-### Korisnicki interfejs
+## Pravila za korisnicki interfejs
 
 - Komponente su prvenstveno server komponente.
-- Klijentske komponente koristiti samo za interakciju, obrasce, klikove i stanje u pregledaču.
+- Klijentske komponente koristiti samo za interakciju, obrasce, klikove i stanje u pregledacu.
 - Dizajn mora biti cist, responzivan i pogodan za tamni rezim.
 - Stilovi se pisu Tailwind klasama.
 - Ponavljani prikazi se izdvajaju u komponente kao sto su dugme, kartica, polje unosa, oznaka, tabela, kartica igraca, kartica tima i kartica utakmice.
@@ -55,36 +57,37 @@ return NextResponse.json({ error: "Igrac nije pronadjen" }, { status: 404 });
 
 ```plaintext
 src/
-├── app/
-│   ├── api/
-│   ├── admin/
-│   ├── matches/
-│   ├── players/
-│   ├── teams/
-│   ├── layout.tsx
-│   └── page.tsx
-├── components/
-│   ├── ui/
-│   ├── layout/
-│   ├── dashboard/
-│   ├── matches/
-│   ├── players/
-│   └── teams/
-├── lib/
-│   ├── auth.ts
-│   ├── data.ts
-│   ├── db.ts
-│   ├── utils.ts
-│   └── validations/
-├── services/
-│   ├── matches.service.ts
-│   ├── players.service.ts
-│   └── teams.service.ts
-└── types/
-    └── index.ts
+  app/
+    api/
+    admin/
+    matches/
+    players/
+    teams/
+    layout.tsx
+    page.tsx
+  components/
+    ui/
+    layout/
+    dashboard/
+    matches/
+    players/
+    teams/
+  lib/
+    auth.ts
+    db.ts
+    errors.ts
+    utils.ts
+    validations/
+  services/
+    matches.service.ts
+    players.service.ts
+    teams.service.ts
+  types/
+    index.ts
 
 prisma/
-└── schema.prisma
+  schema.prisma
+  seed.mjs
 ```
 
 ## Pravila za bazu podataka
@@ -93,6 +96,8 @@ prisma/
 - Odnosi izmedju modela moraju biti definisani u Prisma semi.
 - Ne pisati sirove SQL upite osim ako ne postoji opravdan razlog.
 - Osnovni modeli su `User`, `Season`, `Team`, `Player`, `Match`, `MatchEvent`, `PlayerRating` i `Standing`.
+- Supabase konekcioni string se postavlja u `DATABASE_URL`.
+- Za Vercel produkciju koristiti Supabase pooled connection string.
 
 ## Promjene u bazi
 
@@ -101,6 +106,7 @@ Redoslijed rada kod izmjene baze:
 1. Izmijeniti `prisma/schema.prisma`.
 2. Pokrenuti migraciju komandom `npx prisma migrate dev`.
 3. Osvjeziti Prisma klijent komandom `npx prisma generate`.
+4. Po potrebi popuniti pocetne podatke komandom `npm run db:seed`.
 
 ## Uloge i zastita
 
@@ -144,20 +150,23 @@ npm install
 npm run dev
 npm run build
 npm run lint
-npx prisma studio
 npx prisma generate
 npx prisma migrate dev
+npm run db:seed
+npx prisma studio
 ```
 
 ## Promjenljive okruzenja
 
-Primjer fajla `.env.local`:
+Primjer fajla `.env.local` za lokalni rad:
 
 ```env
 DATABASE_URL="postgresql://korisnik:lozinka@localhost:5432/termin_next"
 NEXTAUTH_SECRET="promijeni-ovu-vrijednost"
 NEXTAUTH_URL="http://localhost:3000"
 ```
+
+Za produkciju na Vercelu treba podesiti iste promjenljive u Vercel podesavanjima. `DATABASE_URL` treba da bude Supabase pooled connection string.
 
 ## Pravilo za zavrsni odgovor agenta
 

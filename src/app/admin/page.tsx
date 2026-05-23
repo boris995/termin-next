@@ -8,6 +8,8 @@ import { getMatches } from "@/services/matches.service";
 import { getPlayers } from "@/services/players.service";
 import { getTeams } from "@/services/teams.service";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminPage() {
   await requireAdmin();
 

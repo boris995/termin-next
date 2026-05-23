@@ -4,7 +4,8 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("TERMIN_POSTGRES_PRISMA_URL")
+  directUrl = env("TERMIN_POSTGRES_URL_NON_POOLING")
 }
 
 model User {
@@ -31,7 +32,7 @@ model Season {
 model Team {
   id           String     @id @default(cuid())
   name         String
-  shortName    String
+  shortName    String     @unique
   city         String
   foundedYear  Int
   primaryColor String
@@ -47,7 +48,7 @@ model Player {
   id        String         @id @default(cuid())
   name      String
   position  String
-  number    Int
+  shirtNumber Int
   teamId    String
   team      Team           @relation(fields: [teamId], references: [id], onDelete: Cascade)
   events    MatchEvent[]
@@ -83,6 +84,7 @@ model MatchEvent {
   player    Player         @relation(fields: [playerId], references: [id], onDelete: Cascade)
   type      MatchEventType
   minute    Int
+  relatedPlayerId String?
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
 }

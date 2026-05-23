@@ -23,6 +23,18 @@ export async function getCurrentUser(): Promise<{ id: string; name: string; role
   });
 }
 
+export async function getCurrentUserSafe(): Promise<{ id: string; name: string; role: AuthRole } | null> {
+  try {
+    return await getCurrentUser();
+  } catch (error) {
+    if (!(error instanceof Error && "digest" in error && error.digest === "DYNAMIC_SERVER_USAGE")) {
+      console.error("Auth provjera nije uspjela", error);
+    }
+
+    return null;
+  }
+}
+
 export async function requireAdmin(): Promise<void> {
   const user = await getCurrentUser();
 

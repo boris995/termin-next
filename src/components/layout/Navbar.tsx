@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Trophy } from "lucide-react";
 import { logoutAction } from "@/app/auth/actions";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUserSafe } from "@/lib/auth";
 
 const links = [
   { href: "/", label: "Pocetna" },
@@ -12,7 +12,7 @@ const links = [
 ];
 
 export async function Navbar() {
-  const user = await getCurrentUser();
+  const user = await getCurrentUserSafe();
 
   return (
     <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur dark:border-slate-800 dark:bg-slate-950/90">

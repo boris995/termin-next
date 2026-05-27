@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { formatDateTime } from "@/lib/utils";
@@ -25,6 +26,11 @@ export function MatchCard({ match }: MatchCardProps) {
           {isFinished ? `${match.homeScore}:${match.awayScore}` : "vs"}
         </div>
         <p className="text-right font-bold text-slate-950 dark:text-white">{match.awayTeam.name}</p>
+      </div>
+      <div className="mt-4 flex justify-end">
+        <Link className="text-sm font-semibold text-grass-700 hover:text-grass-900" href={`/matches/${match.id}`}>
+          Detalji utakmice
+        </Link>
       </div>
     </Card>
   );

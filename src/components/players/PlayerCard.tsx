@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import type { PlayerWithTeam } from "@/types";
@@ -30,6 +31,9 @@ export function PlayerCard({ player }: PlayerCardProps) {
           <p className="text-slate-500 dark:text-slate-400">{player.assists} asistencija</p>
         </div>
       </div>
+      <Link className="mt-4 inline-flex text-sm font-semibold text-grass-700 hover:text-grass-900 dark:text-grass-300 dark:hover:text-grass-200" href={`/players/${player.id}`}>
+        Pogledaj profil
+      </Link>
     </Card>
   );
 }

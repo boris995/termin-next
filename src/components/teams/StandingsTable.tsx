@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { StandingWithTeam } from "@/types";
 
 type StandingsTableProps = {
@@ -28,7 +29,9 @@ export function StandingsTable({ standings }: StandingsTableProps) {
               <td className="px-4 py-3">
                 <div className="flex items-center gap-3">
                   <span className="h-3 w-3 rounded-full" style={{ backgroundColor: standing.team.primaryColor }} />
-                  <span className="font-semibold text-slate-950 dark:text-white">{standing.team.name}</span>
+                  <Link className="font-semibold text-slate-950 transition hover:text-grass-700 dark:text-white dark:hover:text-grass-300" href={`/teams/${standing.teamId}`}>
+                    {standing.team.name}
+                  </Link>
                 </div>
               </td>
               <td className="px-4 py-3">{standing.played}</td>

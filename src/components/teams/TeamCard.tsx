@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Card } from "@/components/ui/Card";
 import type { Team } from "@/types";
 
@@ -26,6 +27,9 @@ export function TeamCard({ team }: TeamCardProps) {
           <p className="text-sm text-slate-500 dark:text-slate-400">{team.city} - osnovan {team.foundedYear}.</p>
         </div>
       </div>
+      <Link className="mt-4 inline-flex text-sm font-semibold text-grass-700 hover:text-grass-900 dark:text-grass-300 dark:hover:text-grass-200" href={`/teams/${team.id}`}>
+        Pogledaj tim
+      </Link>
     </Card>
   );
 }

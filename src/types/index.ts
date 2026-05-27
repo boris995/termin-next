@@ -21,8 +21,17 @@ export type Player = {
 
 export type MatchStatus = "SCHEDULED" | "LIVE" | "FINISHED";
 
+export type Season = {
+  id: string;
+  name: string;
+  startsAt: string;
+  endsAt: string;
+  isActive: boolean;
+};
+
 export type Match = {
   id: string;
+  seasonId: string;
   homeTeamId: string;
   awayTeamId: string;
   homeScore: number | null;
@@ -33,6 +42,7 @@ export type Match = {
 };
 
 export type Standing = {
+  seasonId: string;
   teamId: string;
   played: number;
   won: number;
@@ -46,6 +56,26 @@ export type Standing = {
 export type MatchWithTeams = Match & {
   homeTeam: Team;
   awayTeam: Team;
+};
+
+export type MatchEventView = {
+  id: string;
+  minute: number;
+  type: "GOAL" | "ASSIST" | "YELLOW_CARD" | "RED_CARD" | "SUBSTITUTION";
+  playerName: string;
+  teamName: string;
+};
+
+export type PlayerRatingView = {
+  id: string;
+  playerName: string;
+  teamName: string;
+  rating: number;
+};
+
+export type MatchReport = MatchWithTeams & {
+  events: MatchEventView[];
+  ratings: PlayerRatingView[];
 };
 
 export type StandingWithTeam = Standing & {

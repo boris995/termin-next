@@ -51,6 +51,7 @@ export const players: Player[] = [
 export const matches: Match[] = [
   {
     id: "match-1",
+    seasonId: "season-2026",
     homeTeamId: "team-termin",
     awayTeamId: "team-river",
     homeScore: 3,
@@ -61,6 +62,7 @@ export const matches: Match[] = [
   },
   {
     id: "match-2",
+    seasonId: "season-2026",
     homeTeamId: "team-borac",
     awayTeamId: "team-zvijezda",
     homeScore: 1,
@@ -71,6 +73,7 @@ export const matches: Match[] = [
   },
   {
     id: "match-3",
+    seasonId: "season-2026",
     homeTeamId: "team-river",
     awayTeamId: "team-borac",
     homeScore: null,
@@ -81,6 +84,7 @@ export const matches: Match[] = [
   },
   {
     id: "match-4",
+    seasonId: "season-2026",
     homeTeamId: "team-zvijezda",
     awayTeamId: "team-termin",
     homeScore: null,
@@ -92,8 +96,8 @@ export const matches: Match[] = [
 ];
 
 export const standings: Standing[] = [
-  { teamId: "team-termin", played: 8, won: 6, drawn: 1, lost: 1, goalsFor: 21, goalsAgainst: 10, points: 19 },
-  { teamId: "team-river", played: 8, won: 5, drawn: 1, lost: 2, goalsFor: 18, goalsAgainst: 13, points: 16 },
-  { teamId: "team-borac", played: 8, won: 3, drawn: 3, lost: 2, goalsFor: 12, goalsAgainst: 10, points: 12 },
-  { teamId: "team-zvijezda", played: 8, won: 1, drawn: 1, lost: 6, goalsFor: 9, goalsAgainst: 27, points: 4 }
+  { seasonId: "season-2026", teamId: "team-termin", played: 8, won: 6, drawn: 1, lost: 1, goalsFor: 21, goalsAgainst: 10, points: 19 },
+  { seasonId: "season-2026", teamId: "team-river", played: 8, won: 5, drawn: 1, lost: 2, goalsFor: 18, goalsAgainst: 13, points: 16 },
+  { seasonId: "season-2026", teamId: "team-borac", played: 8, won: 3, drawn: 3, lost: 2, goalsFor: 12, goalsAgainst: 10, points: 12 },
+  { seasonId: "season-2026", teamId: "team-zvijezda", played: 8, won: 1, drawn: 1, lost: 6, goalsFor: 9, goalsAgainst: 27, points: 4 }
 ];

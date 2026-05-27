@@ -8,3 +8,9 @@ export const playerSchema = z.object({
 });
 
 export type PlayerInput = z.infer<typeof playerSchema>;
+
+export const playerUpdateSchema = playerSchema.extend({
+  id: z.string().min(1)
+});
+
+export type PlayerUpdateInput = z.infer<typeof playerUpdateSchema>;

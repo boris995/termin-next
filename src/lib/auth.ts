@@ -6,6 +6,19 @@ import { createClient } from "@/utils/supabase/server";
 
 export type AuthRole = "ADMIN" | "USER";
 
+function isIgnoredAuthError(error: unknown): boolean {
+  if (!(error instanceof Error)) {
+    return false;
+  }
+
+  const maybeAuthError = error as Error & {
+    code?: string;
+    status?: number;
+  };
+
+  return maybeAuthError.code === "refresh_token_not_found" || (maybeAuthError.status === 400 && error.message.includes("Invalid Refresh Token"));
+}
+
 export async function getCurrentUser(): Promise<{ id: string; name: string; role: AuthRole } | null> {
   const supabase = createClient(await cookies());
   const {
@@ -27,7 +40,7 @@ export async function getCurrentUserSafe(): Promise<{ id: string; name: string; 
   try {
     return await getCurrentUser();
   } catch (error) {
-    if (!(error instanceof Error && "digest" in error && error.digest === "DYNAMIC_SERVER_USAGE")) {
+    if (!isIgnoredAuthError(error) && !(error instanceof Error && "digest" in error && error.digest === "DYNAMIC_SERVER_USAGE")) {
       console.error("Auth provjera nije uspjela", error);
     }
 
